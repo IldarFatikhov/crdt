@@ -1,10 +1,10 @@
 (ns crdt.g-counter)
 
-(defn counter []
-  (atom {}))
+(defn g-counter []
+  (let [node-id (keyword (str (java.util.UUID/randomUUID)))]
+    (atom {node-id 0})))
 
-(defn increment-counter
-  "Increment counter"
-  [counter-state]
-  (let [counter-state-value @counter-state]
-    (println counter-state-value)))
+(defn increment-g-counter
+  [g-counter node-id value]
+  (let [increment-func (fn [current-val] (+ current-val value))]
+    (swap! g-counter update-in [node-id] increment-func)))
